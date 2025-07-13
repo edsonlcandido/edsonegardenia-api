@@ -16,12 +16,19 @@ RUN apk add --no-cache unzip
 
 ARG PB_VERSION=0.28.4
 ARG BUILD_DIR=/tmp/pb_build # Diretório temporário para o build
+ARG REPO_URL=https://github.com/edsonlcandido/edinhoegardenia.git # <--- URL do repositório
+ARG REPO_BRANCH=fix/merge-fotos-e-presentes # <--- Branch específica
+ARG REPO_DIR=/tmp/repo_clone # <--- Diretório temporário para o clone
 
 # Baixa o PocketBase e o descompacta no diretório temporário.
 # Fixamos para linux_amd64, já que você não precisa da verificação de arquitetura.
 RUN curl -fsSL -o /tmp/pocketbase.zip \
     https://github.com/pocketbase/pocketbase/releases/download/v${PB_VERSION}/pocketbase_${PB_VERSION}_linux_amd64.zip \
     && unzip /tmp/pocketbase.zip -d $BUILD_DIR/
+
+# Clona o repositório Git na branch especificada
+# O --depth 1 é para clonagem rasa, baixando apenas a última revisão, economizando espaço
+RUN git clone --branch ${REPO_BRANCH} --depth 1 ${REPO_URL} ${REPO_DIR}
 
 # Estágio FINAL
 # Este estágio cria a imagem final, leve e segura.
@@ -54,6 +61,12 @@ RUN addgroup -g ${GID} ${GROUP} \
 
 # Copia APENAS o executável do PocketBase do estágio de build para o estágio final.
 COPY --from=build $BUILD_DIR/pocketbase $PB_HOME/pocketbase
+
+# <--- Adição para copiar o conteúdo do repositório clonado --->
+# Copia o conteúdo da pasta 'pb_public' do repositório clonado
+# para o diretório de trabalho do PocketBase na imagem final.
+# Certifique-se de que a pasta pb_public exista no repositório clonado.
+COPY --from=build $REPO_DIR/ $PB_WORKDIR/pb_public
 
 # Garante que o executável tenha permissões corretas e cria um symlink
 # para que possa ser executado facilmente de qualquer lugar.
