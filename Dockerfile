@@ -12,7 +12,7 @@ FROM base AS build
 
 # Instala unzip, que só é necessário para descompactar o PocketBase.
 # Ele NÃO estará na imagem final.
-RUN apk add --no-cache unzip
+RUN apk add --no-cache unzip git
 
 ARG PB_VERSION=0.28.4
 ARG BUILD_DIR=/tmp/pb_build # Diretório temporário para o build
