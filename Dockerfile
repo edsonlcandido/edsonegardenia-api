@@ -34,6 +34,7 @@ ARG USER=pocketbase
 ARG GROUP=pocketbase
 ARG PB_WORKDIR=/pocketbase # Diretório de trabalho para os dados do PocketBase
 ARG PB_HOME=/opt/pocketbase # Onde o executável do PocketBase será copiado
+ARG BUILD_DIR=/tmp/pb_build # Diretório temporário para o build
 
 # Define variáveis de ambiente para a aplicação
 ENV TZ=America/Sao_Paulo \
