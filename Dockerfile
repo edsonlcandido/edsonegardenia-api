@@ -1,3 +1,6 @@
+ARG BUILD_DIR=/tmp/pb_build # Diretório temporário para o build
+ARG REPO_DIR=/tmp/repo_clone # <--- Diretório temporário para o clone
+
 # Estágio de BASE
 # Define a imagem base para os outros estágios
 FROM alpine:3.22 AS base
@@ -18,7 +21,7 @@ ARG PB_VERSION=0.28.4
 ARG BUILD_DIR=/tmp/pb_build # Diretório temporário para o build
 ARG REPO_URL=https://github.com/edsonlcandido/edinhoegardenia.git # <--- URL do repositório
 ARG REPO_BRANCH=fix/merge-fotos-e-presentes # <--- Branch específica
-ARG REPO_DIR=/tmp/repo_clone # <--- Diretório temporário para o clone
+ARG REPO_DIR #<--- Diretório temporário para o clone GLOBAL
 
 # Baixa o PocketBase e o descompacta no diretório temporário.
 # Fixamos para linux_amd64, já que você não precisa da verificação de arquitetura.
@@ -41,8 +44,8 @@ ARG USER=pocketbase
 ARG GROUP=pocketbase
 ARG PB_WORKDIR=/pocketbase # Diretório de trabalho para os dados do PocketBase
 ARG PB_HOME=/opt/pocketbase # Onde o executável do PocketBase será copiado
-ARG BUILD_DIR=/tmp/pb_build # Diretório temporário para o build
-ARG REPO_DIR=/tmp/repo_clone # <--- Diretório temporário para o clone
+ARG BUILD_DIR # Diretório temporário para o build GLOBAL
+ARG REPO_DIR # <--- Diretório temporário para o clone GLOBAL
 
 # Define variáveis de ambiente para a aplicação
 ENV TZ=America/Sao_Paulo \
