@@ -1,0 +1,10 @@
+# Dockerfile.prod
+
+# Inicia a partir do Dockerfile padrão, mas sobrescrevendo a branch
+ARG REPO_BRANCH=main # <--- Sobrescreve a branch para 'main'
+
+FROM Dockerfile 
+
+# O resto do Dockerfile (todas as instruções) é herdado do Dockerfile principal.
+# Não há mais nada para adicionar aqui, a menos que você queira outras mudanças
+# específicas de produção.
