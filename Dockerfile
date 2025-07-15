@@ -20,7 +20,7 @@ RUN apk add --no-cache unzip git
 ARG PB_VERSION=0.28.4
 ARG BUILD_DIR=/tmp/pb_build # Diretório temporário para o build
 ARG REPO_URL=https://github.com/edsonlcandido/edinhoegardenia.git # <--- URL do repositório
-ENV REPO_BRANCH=fix/merge-fotos-e-presentes 
+ARG REPO_BRANCH=fix/merge-fotos-e-presentes 
 ARG REPO_DIR #<--- Diretório temporário para o clone GLOBAL
 
 # Baixa o PocketBase e o descompacta no diretório temporário.
