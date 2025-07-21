@@ -1,6 +1,6 @@
 ARG BUILD_DIR=/tmp/pb_build # Diretório temporário para o build
 ARG REPO_DIR=/tmp/repo_clone # <--- Diretório temporário para o clone
-ARG REPO_BRANCH=fix/merge-fotos-e-presentes 
+ARG REPO_BRANCH=copilot/fix-13 
 
 # Estágio de BASE
 # Define a imagem base para os outros estágios
