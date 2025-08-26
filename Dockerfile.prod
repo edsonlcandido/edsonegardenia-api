@@ -1,6 +1,6 @@
 ARG BUILD_DIR=/tmp/pb_build # Diretório temporário para o build
 ARG REPO_DIR=/tmp/repo_clone # <--- Diretório temporário para o clone
-ARG REPO_BRANCH=release/completo-1.00 # <--- Branch do repositório
+ARG REPO_BRANCH=release/release-1.01 # <--- Branch do repositório
 
 # Estágio de BASE
 # Define a imagem base para os outros estágios
