@@ -118,10 +118,16 @@ routerAdd("post", "/api/criar-checkout", (c) => {
     // Verificar resposta do PagBank
     if (res.statusCode < 200 || res.statusCode >= 300) {
       const bodyStr = toString(res.body);
-      console.error("Erro ao criar checkout PagBank:", {
-        status: res.statusCode,
-        message: bodyStr
-      });
+      console.error("Erro ao criar checkout PagBank - Status: " + res.statusCode);
+      console.error("Erro ao criar checkout PagBank - Body: " + bodyStr);
+      
+      try {
+        const errorData = JSON.parse(bodyStr);
+        console.error("Erro ao criar checkout PagBank - JSON: " + JSON.stringify(errorData));
+      } catch (e) {
+        // Body não é JSON, apenas mostra como string
+      }
+      
       return c.json(res.statusCode >= 500 ? 500 : 400, {
         error: "Erro ao processar pagamento. Verifique os dados e tente novamente."
       });
