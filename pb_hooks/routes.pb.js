@@ -30,7 +30,7 @@ routerAdd("post", "/api/criar-checkout", (c) => {
     // Buscar configuração do modo (sandbox ou producao)
     const configuracaoApp = c.app.findRecordById("configuracao_app", "settings");
     if (!configuracaoApp) {
-      console.error("Configuração de app não encontrada");
+      $app.logger().error("Configuração de app não encontrada");
       return c.json(500, {
         error: "Configuração do aplicativo não encontrada"
       });
@@ -38,7 +38,7 @@ routerAdd("post", "/api/criar-checkout", (c) => {
 
     const modo = configuracaoApp.get("modo_pagbank"); // sandbox ou producao
     if (!modo) {
-      console.error("Modo PagBank não configurado");
+      $app.logger().error("Modo PagBank não configurado");
       return c.json(500, {
         error: "Modo de pagamento não configurado"
       });
@@ -48,7 +48,7 @@ routerAdd("post", "/api/criar-checkout", (c) => {
     const configuracaoPagbank = c.app.findFirstRecordByData("configuracao_pagbank", "id", modo);
     
     if (!configuracaoPagbank) {
-      console.error(`Configuração PagBank para modo '${modo}' não encontrada`);
+      $app.logger().error(`Configuração PagBank para modo '${modo}' não encontrada`);
       return c.json(500, {
         error: `Configuração de pagamento para modo '${modo}' não encontrada`
       });
@@ -58,7 +58,7 @@ routerAdd("post", "/api/criar-checkout", (c) => {
     const token = configuracaoPagbank.get("token");
 
     if (!urlBase || !token) {
-      console.error("URL ou token do PagBank não configurados");
+      $app.logger().error("URL ou token do PagBank não configurados");
       return c.json(500, {
         error: "Credenciais de pagamento incompletas"
       });
@@ -104,6 +104,8 @@ routerAdd("post", "/api/criar-checkout", (c) => {
     const baseUrl = urlBase.replace(/\/$/, "");
     const checkoutUrl = baseUrl + "/checkouts";
     
+
+
     const res = $http.send({
       url: checkoutUrl,
       method: "POST",
@@ -114,16 +116,15 @@ routerAdd("post", "/api/criar-checkout", (c) => {
       body: JSON.stringify(checkoutPayload),
       timeout: 30
     });
-
     // Verificar resposta do PagBank
     if (res.statusCode < 200 || res.statusCode >= 300) {
       const bodyStr = toString(res.body);
-      console.error("Erro ao criar checkout PagBank - Status: " + res.statusCode);
-      console.error("Erro ao criar checkout PagBank - Body: " + bodyStr);
+      $app.logger().error("Erro ao criar checkout PagBank - Status: " + res.statusCode);
+      $app.logger().error("Erro ao criar checkout PagBank - Body: " + bodyStr);
       
       try {
         const errorData = JSON.parse(bodyStr);
-        console.error("Erro ao criar checkout PagBank - JSON: " + JSON.stringify(errorData));
+        $app.logger().error("Erro ao criar checkout PagBank - JSON: " + JSON.stringify(errorData));
       } catch (e) {
         // Body não é JSON, apenas mostra como string
       }
@@ -146,7 +147,7 @@ routerAdd("post", "/api/criar-checkout", (c) => {
     }
 
     if (!payUrl) {
-      console.error("Link PAY não encontrado na resposta do PagBank");
+      $app.logger().error("Link PAY não encontrado na resposta do PagBank");
       return c.json(500, {
         error: "Resposta inválida do serviço de pagamento"
       });
@@ -159,7 +160,7 @@ routerAdd("post", "/api/criar-checkout", (c) => {
     });
 
   } catch (error) {
-    console.error("Erro ao processar checkout: " + error);
+    $app.logger().error("Erro ao processar checkout: " + error);
     return c.json(500, {
       error: "Erro interno do servidor"
     });
@@ -238,9 +239,9 @@ onRecordCreateRequest((e) => {
         })
 
         e.app.newMailClient().send(message)
-        console.log(`✅ Email de confirmação enviado - ${nome} (${quantidadePessoas} pessoas)`)
+        $app.logger().info(`✅ Email de confirmação enviado - ${nome} (${quantidadePessoas} pessoas)`)
         
     } catch (err) {
-        console.error("❌ Erro ao enviar email de confirmação:", err)
+        $app.logger().error("❌ Erro ao enviar email de confirmação:", err)
     }
 }, "confirmacao")
